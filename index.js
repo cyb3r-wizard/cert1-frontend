@@ -15,9 +15,6 @@ const users = [
 app.use(express.static("public"));
 // Escriba su código a partir de aquí
 
-app.get("/api", (req, res) => {
-  res.send("<h1>Hola Mundo!</h1>");
-});
 
 // Hasta aquí
 
