@@ -3,9 +3,7 @@ import { users } from "../index.js";
 export const userMiddleware = (req, res, next) => {
   try {
     const no = { message: "Permiso Denegado >:(" };
-    console.log("accediendo al middleware");
     const tokenAuthorization = req.get("X-Authorization");
-    console.log(tokenAuthorization);
     const user = users.find((user) => user.token === tokenAuthorization);
     if (!tokenAuthorization) {
       console.log("No hay token");

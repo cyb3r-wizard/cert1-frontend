@@ -23,6 +23,8 @@ const users = [
   },
 ];
 
+const reminders = [];
+
 app.use(express.static("public"));
 
 // Escriba su código a partir de aquí
@@ -40,4 +42,4 @@ app.listen(PORT, (error) => {
   console.log(`Escuchando en el puerto ${PORT}`);
 });
 
-export { users };
+export { users, reminders };
