@@ -23,7 +23,6 @@ Content-Type: application/json
 }
 
 ###
-
 # Debe poder ver los recordatorions (Inicialmente vacío). Recordar enviar el token entregado en 
 # el login con la cabecera X-Authorization
 GET {{base}}/api/reminders HTTP/1.1
@@ -50,7 +49,7 @@ Content-Type: application/json
 X-Authorization: {{authToken}}
 
 {
-	"title": "Debo de recordar no olvidar este recordatorio",
+	"content": "Debo de recordar no olvidar este recordatorio",
 	"important": true
 }
 

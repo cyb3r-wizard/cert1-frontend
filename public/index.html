@@ -63,44 +63,42 @@
             <button @click="logout">Logout</button>
           </div>
 
-					<form @submit.prevent="addReminder" class="mb-3">
-						<input
-							v-model="content"
-							class="mb-3 px-3 py-2 rounded border border-gray-200 w-full"
-							placeholder="Escribe un recordatorio..."
-							required
-							maxlength="120"
-						/>
-						<label>
-							Importante: 
-							<input v-model="important" type="checkbox" />
-						</label>
-					</form>
+          <form @submit.prevent="addReminder" class="mb-3">
+            <input
+              v-model="content"
+              class="mb-3 px-3 py-2 rounded border border-gray-200 w-full"
+              placeholder="Escribe un recordatorio..."
+              required
+              maxlength="120"
+            />
+            <label>
+              Importante:
+              <input v-model="important" type="checkbox" />
+            </label>
+          </form>
 
           <ul>
-            <li
-              v-for="reminder of orderedReminders"
-              :key="reminder.id"
-              
-            >
-							<time>{{ new Date(reminder.createdAt).toLocaleString() }}</time>
-							<div class="grid grid-cols-[1fr_auto_20px] gap-3 mb-3">
-								<input
-									:value="reminder.content"
-									@keyup.enter="changeContent(reminder, $event)"
-									@blur="changeContent(reminder, $event)"
-									class="rounded px-2 py-1"
-								/>
-								<label>
-									Importante: 
-									<input
-										type="checkbox"
-										:checked="reminder.important"
-										@change="toggleImportant(reminder, $event)"
-									/>
-								</label>
-								<button type="button" @click="deleteReminder(reminder)">X</button>
-							</div>
+            <li v-for="reminder of orderedReminders" :key="reminder.id">
+              <time>{{ new Date(reminder.createdAt).toLocaleString() }}</time>
+              <div class="grid grid-cols-[1fr_auto_20px] gap-3 mb-3">
+                <input
+                  :value="reminder.content"
+                  @keyup.enter="changeContent(reminder, $event)"
+                  @blur="changeContent(reminder, $event)"
+                  class="rounded px-2 py-1"
+                />
+                <label>
+                  Importante:
+                  <input
+                    type="checkbox"
+                    :checked="reminder.important"
+                    @change="toggleImportant(reminder, $event)"
+                  />
+                </label>
+                <button type="button" @click="deleteReminder(reminder)">
+                  X
+                </button>
+              </div>
             </li>
           </ul>
         </div>
@@ -114,21 +112,20 @@
           const username = ref("");
           const password = ref("");
           const content = ref("");
-					const important = ref(false);
+          const important = ref(false);
           const reminders = ref([]);
           const page = ref(0);
           const user = ref(null);
-					const orderedReminders = computed(() => {
-						return reminders.value.toSorted((a, b) => {
-							if (a.important && !b.important)  {
-								return -1;
-							}
-							else if (!a.important && b.important) {
-								return 1;
-							}
-							return a.createdAt - b.createdAt;
-						})
-					});
+          const orderedReminders = computed(() => {
+            return reminders.value.toSorted((a, b) => {
+              if (a.important && !b.important) {
+                return -1;
+              } else if (!a.important && b.important) {
+                return 1;
+              }
+              return a.createdAt - b.createdAt;
+            });
+          });
 
           function myfetch(route, method, body) {
             const options = {
@@ -203,9 +200,12 @@
           }
 
           async function addReminder() {
-            const reminder = await post("/api/reminders", { content: content.value, important: important.value });
+            const reminder = await post("/api/reminders", {
+              content: content.value,
+              important: important.value,
+            });
             content.value = "";
-						important.value = false;
+            important.value = false;
             reminders.value.push(reminder);
           }
 
@@ -216,7 +216,9 @@
               important,
             });
 
-            const index = reminders.value.findIndex((reminder) => reminder.id === id);
+            const index = reminders.value.findIndex(
+              (reminder) => reminder.id === id
+            );
 
             if (index !== -1) {
               reminders.value[index] = newReminder;
@@ -230,7 +232,9 @@
               content,
             });
 
-            const index = reminders.value.findIndex((reminder) => reminder.id === id);
+            const index = reminders.value.findIndex(
+              (reminder) => reminder.id === id
+            );
 
             if (index !== -1) {
               reminders.value[index] = newReminder;
@@ -239,8 +243,10 @@
 
           async function deleteReminder(reminder) {
             await remove("/api/reminders/" + reminder.id);
-
-            const index = reminders.value.findIndex((t) => t.id === reminder.id);
+            console.log(reminder.id);
+            const index = reminders.value.findIndex(
+              (t) => t.id === reminder.id
+            );
 
             if (index !== -1) {
               reminders.value.splice(index, 1);
@@ -257,10 +263,10 @@
             username,
             password,
             content,
-						important,
+            important,
             user,
             reminders,
-						orderedReminders,
+            orderedReminders,
             login,
             logout,
             addReminder,
