@@ -10,6 +10,22 @@ reminderRouter.get("/", (req, res) => {
 reminderRouter.post("/", (req, res) => {
   try {
     const { content, important } = req.body;
+
+    // typeof important !== undefined ? (important = true) : (important = false);
+    if (typeof content !== "string") {
+      return res.status(400).json({ message: "El mensaje debe ser un string" });
+    }
+    if (content.length > 120) {
+      return res.status(400).json({
+        message: "El mensaje es demasiado largo (max. 120 caracteres)",
+      });
+    }
+
+    if (typeof important !== "boolean") {
+      return res.status(400).json({
+        message: "Esto no es un booleano!",
+      });
+    }
     const reminder = {
       id: crypto.randomUUID(),
       content: content,
@@ -19,38 +35,35 @@ reminderRouter.post("/", (req, res) => {
     reminders.push(reminder);
     res.status(201).json(reminder);
   } catch (error) {
-    res
-      .status(400)
-      .json({ error: `ERROR: ${error} datetime:${reminder.createdAt}` });
+    res.status(400).json({ error: `ERROR: ${error}` });
   }
 });
 
 reminderRouter.patch("/:id", (req, res) => {
   try {
-    const id = req.params;
-    const reminder = reminders.find((rem) => rem.id);
-
+    const { id } = req.params;
+    const reminder = reminders.find((reminder) => reminder.id === id);
     if (!reminder) {
       return res.status(404);
     }
-
     const { important, content } = req.body;
 
-    console.log(`${important} + ${content}`);
-
-    if (content) {
-      console.log("hay content");
-      reminder.content = content;
+    if (typeof content !== "string") {
+      return res.status(400).json(reminder);
+    }
+    if (content.length > 120) {
+      return res.status(400).json(reminder);
     }
 
-    if (typeof important === "Boolean") {
-      console.log("hay important");
+    if (typeof important === "boolean") {
       reminder.important = important;
     }
 
-    return res.json({ message: `Has ingresado el id: ${id} ` });
+    reminder.content = content;
+
+    return res.status(200).json(reminder);
   } catch (error) {
-    return res.status(400).json({ error: `ERROR ${error}` });
+    return res.status(400).json({ error: `reminder router error: ${error}` });
   }
 });
 
@@ -69,3 +82,8 @@ reminderRouter.delete("/:id", (req, res) => {
 });
 
 export default reminderRouter;
+
+/* 
+Echemos unos commander profe 
+Juego mono black y golgari(con proxy)
+*/

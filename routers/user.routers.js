@@ -22,17 +22,17 @@ userRouter.post("/", async (req, res) => {
     if (derivedKey.toString("hex") !== hash) {
       return res
         .status(401)
-        .json({ message: "Credenciales inválidas. Password incorrecto" });
+        .json({ message: "Credenciales inválidas. Password mal escrito >:(" });
     }
     let token = randomBytes(48).toString("hex");
     user.token = token;
-    return res.json({
+    return res.status(200).json({
       username: user.username,
       name: user.name,
       token: user.token,
     });
   } catch (err) {
-    return res.status(403).json({ message: "ERROR " + err });
+    return res.status(403).json({ message: "user router error: " + err });
   }
 });
 
