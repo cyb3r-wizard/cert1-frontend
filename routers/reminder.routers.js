@@ -26,6 +26,7 @@ reminderRouter.post("/", (req, res) => {
         message: "Esto no es un booleano!",
       });
     }
+
     const reminder = {
       id: crypto.randomUUID(),
       content: content,
@@ -46,20 +47,19 @@ reminderRouter.patch("/:id", (req, res) => {
     if (!reminder) {
       return res.status(404);
     }
-    const { important, content } = req.body;
-
-    if (typeof content !== "string") {
-      return res.status(400).json(reminder);
-    }
-    if (content.length > 120) {
-      return res.status(400).json(reminder);
-    }
-
-    if (typeof important === "boolean") {
+    let { important, content } = req.body;
+    if (typeof important !== "undefined") {
       reminder.important = important;
+    } else if (content) {
+      content = content.toString();
+      if (content.length > 120) {
+        return res.status(400).json(reminder);
+      } else if (typeof content !== "string") {
+        return res.status(400).json(reminder);
+      } else {
+        reminder.content = content;
+      }
     }
-
-    reminder.content = content;
 
     return res.status(200).json(reminder);
   } catch (error) {
