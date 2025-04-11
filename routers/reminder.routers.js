@@ -15,6 +15,12 @@ reminderRouter.post("/", (req, res) => {
     if (typeof content !== "string") {
       return res.status(400).json({ message: "El mensaje debe ser un string" });
     }
+    let contSpace = content.trim();
+    if (contSpace.length <= 0) {
+      return res
+        .status(400)
+        .json({ message: "El mensaje no pueden ser sólo espacios" });
+    }
     if (content.length > 120) {
       return res.status(400).json({
         message: "El mensaje es demasiado largo (max. 120 caracteres)",
@@ -52,9 +58,13 @@ reminderRouter.patch("/:id", (req, res) => {
       reminder.important = important;
     } else if (content) {
       content = content.toString();
+      let contSpace = content.trim();
+      console.log(contSpace.length);
       if (content.length > 120) {
         return res.status(400).json(reminder);
       } else if (typeof content !== "string") {
+        return res.status(400).json(reminder);
+      } else if (contSpace.length <= 0) {
         return res.status(400).json(reminder);
       } else {
         reminder.content = content;
